@@ -16,6 +16,7 @@ def relative_error(real, approx):
     y = abs(real - approx) / abs(real)
     return y
 
+
 def absolute_error(real, approx):
     y = abs(real - approx)
     return y
