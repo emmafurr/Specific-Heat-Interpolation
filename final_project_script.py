@@ -12,6 +12,15 @@ import scipy
 from mpl_toolkits.mplot3d import Axes3D
 
 
+def relative_error(real, approx):
+    y = abs(real - approx) / abs(real)
+    return y
+
+def absolute_error(real, approx):
+    y = abs(real - approx)
+    return y
+
+
 # # Natural Cubic Spline Algorithm
 
 
