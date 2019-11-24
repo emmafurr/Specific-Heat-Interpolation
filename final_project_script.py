@@ -12,16 +12,7 @@ import scipy
 from mpl_toolkits.mplot3d import Axes3D
 from sympy import Symbol, poly, factor
 
-def relative_error(real, approx):
-    y = abs(real - approx) / abs(real)
-    return y
-
-def absolute_error(real, approx):
-    y = abs(real - approx)
-    return y
-
-
-# # Natural Cubic Spline Algorithm
+# Natural Cubic Spline Algorithm
 
 
 def main():
@@ -63,6 +54,13 @@ def main():
 
     # Compare results
 
+def relative_error(real, approx):
+    y = abs(real - approx) / abs(real)
+    return y
+
+def absolute_error(real, approx):
+    y = abs(real - approx)
+    return y
 
 def vec(m): z = [0]*m ; return(z)
 def splineConstructor(list_x, list_fx, factor_it = 'yes'):
