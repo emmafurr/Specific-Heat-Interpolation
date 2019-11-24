@@ -71,6 +71,10 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable
     return Q_table[n][n], Q_table; 
 
 
+# nodes = (x_0, x_1, ... x_n)
+# function = function that we are approximating
+# x value we use to approximate and check 
+# degree specification of approximating polynomial.
 def lagrange_polynomial(nodes, function, x, degree_specification):
     # nth_degree = len(nodes) - 1
     whole_polynomial = 0
