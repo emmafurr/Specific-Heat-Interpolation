@@ -10,25 +10,57 @@ import string
 import matplotlib.pyplot as plt
 import scipy
 from mpl_toolkits.mplot3d import Axes3D
+from sympy import Symbol, poly, factor
 
+# Natural Cubic Spline Algorithm
+
+
+def main():
+
+
+    # Goal:
+    # Our data set:
+    #----------------------------------------
+
+    
+
+
+
+
+
+
+
+
+    #-----------------------------------------
+
+    print('We will use now Cubic Spline Interoplation with our data set:')
+    # splineConstructor(list_x, list_fx, factor_it = 'yes')
+
+    
+    #--------------------------------
+    print('We will use now Lagrange Interoplation with our data set:')
+    # lagrange_polynomial(nodes, function, x, degree_specification)
+
+    
+    #--------------------------------
+    print('We will use now Nevilles method with a data set:')
+    # nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable = 'no')
+
+
+    #--------------------------------
+
+    # Find relative error
+    #relative_error(real, approx)
+
+    # Compare results
+
+#  Relative error function
 
 def relative_error(real, approx):
     y = abs(real - approx) / abs(real)
     return y
 
-
-def absolute_error(real, approx):
-    y = abs(real - approx)
-    return y
-
-
-# # Natural Cubic Spline Algorithm
-
-
 def vec(m): z = [0]*m ; return(z)
-
-
-from sympy import Symbol, poly, factor
 def splineConstructor(list_x, list_fx, factor_it = 'yes'):
     n =  len(list_x)
     h = vec(n-1) ; alpha = vec(n-1) ; l = vec(n+1)
@@ -81,10 +113,8 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable
     return Q_table[n][n], Q_table; 
 
 
-# nodes = (x_0, x_1, ... x_n)
-# function = function that we are approximating
-# x value we use to approximate and check 
-# degree specification of approximating polynomial.
+# Lagrange Interpolation
+
 def lagrange_polynomial(nodes, function, x, degree_specification):
     # nth_degree = len(nodes) - 1
     whole_polynomial = 0
@@ -102,5 +132,5 @@ def lagrange_polynomial(nodes, function, x, degree_specification):
         whole_polynomial += coeffient_polynomial
     return whole_polynomial
 
-
-
+# Call the main function.
+main()
