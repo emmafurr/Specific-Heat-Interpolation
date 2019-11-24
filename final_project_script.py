@@ -70,3 +70,24 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',       
     if notable == 'yes':
         return
     return Q_table[n][n], Q_table; 
+
+
+def lagrange_polynomial(nodes, function, x, degree_specification):
+    # nth_degree = len(nodes) - 1
+    whole_polynomial = 0
+    nodes = nodes[:degree_specification + 1]
+    for coefficients in range(0, len(nodes)):
+        current_node = nodes[coefficients]
+        rest_of_nodes = nodes[:coefficients] + nodes[coefficients + 1:]
+        coeffcient_polynomial_numerator = 1
+        coeffcient_polynomial_denominator = 1
+        for remaining_nodes in rest_of_nodes:
+            coeffcient_polynomial_numerator = coeffcient_polynomial_numerator * (x - remaining_nodes)
+        for remaining_nodes2 in rest_of_nodes:
+            coeffcient_polynomial_denominator = coeffcient_polynomial_denominator * (current_node - remaining_nodes2)
+        coeffient_polynomial = function(current_node) * (coeffcient_polynomial_numerator / coeffcient_polynomial_denominator)
+        whole_polynomial += coeffient_polynomial
+    return whole_polynomial
+
+
+
