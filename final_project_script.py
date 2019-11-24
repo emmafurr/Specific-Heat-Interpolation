@@ -10,15 +10,52 @@ import string
 import matplotlib.pyplot as plt
 import scipy
 from mpl_toolkits.mplot3d import Axes3D
-
+from sympy import Symbol, poly, factor
 
 # # Natural Cubic Spline Algorithm
 
 
+def main():
+
+
+    # Goal:
+    # Our data set:
+    #----------------------------------------
+
+
+
+
+
+
+
+
+
+
+    #-----------------------------------------
+
+    print('We will use now Cubic Spline Interoplation with our data set:')
+    # splineConstructor(list_x, list_fx, factor_it = 'yes')
+
+    
+    #--------------------------------
+     print('We will use now Lagrange Interoplation with our data set:')
+    # lagrange_polynomial(nodes, function, x, degree_specification)
+
+    
+    #--------------------------------
+     print('We will use now Nevilles method with a data set:')
+    # nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable = 'no')
+
+
+    #--------------------------------
+
+    # Find relative error
+    #relative_error(real, approx)
+
+    # Compare results
+
+
 def vec(m): z = [0]*m ; return(z)
-
-
-from sympy import Symbol, poly, factor
 def splineConstructor(list_x, list_fx, factor_it = 'yes'):
     n =  len(list_x)
     h = vec(n-1) ; alpha = vec(n-1) ; l = vec(n+1)
