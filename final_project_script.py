@@ -38,12 +38,12 @@ def main():
 
     
     #--------------------------------
-     print('We will use now Lagrange Interoplation with our data set:')
+    print('We will use now Lagrange Interoplation with our data set:')
     # lagrange_polynomial(nodes, function, x, degree_specification)
 
     
     #--------------------------------
-     print('We will use now Nevilles method with a data set:')
+    print('We will use now Nevilles method with a data set:')
     # nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable = 'no')
 
 
@@ -136,5 +136,5 @@ def lagrange_polynomial(nodes, function, x, degree_specification):
         whole_polynomial += coeffient_polynomial
     return whole_polynomial
 
-
-
+# Call the main function.
+main()
