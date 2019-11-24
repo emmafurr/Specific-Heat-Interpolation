@@ -10,55 +10,141 @@ import string
 import matplotlib.pyplot as plt
 import scipy
 from mpl_toolkits.mplot3d import Axes3D
-from sympy import Symbol, poly, factor
-
-# Natural Cubic Spline Algorithm
+from sympy import Symbol, poly, factor, expand
 
 
 def main():
 
-
-    # Goal:
-    # Our data set:
-    #----------------------------------------
-
+# We use x = 24, x = 56, x = 83
     
+# Our data set:
+# -----------------------------------------------------------------------
+    list_x = [22,42,52,82,100]
+    list_fx = [4181,4179,4186,4199,4217]
+    x1 = 24 
+    x2 = 56
+    x3 = 83
+    def fx():
+        return
+# -----------------------------------------------------------------------
 
-
-
-
-
-
-
-
-    #-----------------------------------------
+# ======================== x1 = 24 degrees Celcius ======================== 
+    print('We find the actual value f(x):')
+    actual = find_real(fx,x1)
 
     print('We will use now Cubic Spline Interoplation with our data set:')
-    # splineConstructor(list_x, list_fx, factor_it = 'yes')
-
+    splineConstructor(list_x, list_fx, factor_it = 'yes')
+    print('We evaluate the necessary spline function to find approximation.')
+    spline_approx = 0
     
-    #--------------------------------
+    print('We find the relative error:')
+    s1_error = relative_error(actual, spline_approx)
+    print('Relative error for Spline: ', s1_error)
+    
+# -----------------------------------------------------------------------
     print('We will use now Lagrange Interoplation with our data set:')
-    # lagrange_polynomial(nodes, function, x, degree_specification)
-
+    lagrange_polynomial(list_x, list_fx)
+    print('We evaluate the highest degree Lagrange to find approximation.')
+    lagrange_approx = 0
     
-    #--------------------------------
+    print('We find the relative error:')
+    l1_error = relative_error(actual, lagrange_approx)
+    print('Relative error for Lagrange: ', l1_error)
+    
+# -----------------------------------------------------------------------
     print('We will use now Nevilles method with a data set:')
-    # nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable = 'no')
+    nevillesMethod(x1, list_x, list_fx, Q_table = None\
+                   , individual = 'no',notable = 'no')
+    print('We consider the Q_4,4 th table entry - The highest degree approximation.')
+    neville_approx = 0
+    
+    print('We find the relative error:')
+    n1_error = relative_error(actual, neville_approx)
+    print('Relative error for Neville: ', n1_error)
+# =========================================================================
+# ======================== x2 = 56 degrees Celcius ======================== 
+    print('We find the actual value f(x):')
+    actual = find_real(fx,x2)
+
+    print('We will use now Cubic Spline Interoplation with our data set:')
+    splineConstructor(list_x, list_fx, factor_it = 'yes')
+    print('We evaluate the necessary spline function to find approximation.')
+    spline_approx = 0
+    
+    print('We find the relative error:')
+    s2_error = relative_error(actual, spline_approx)
+    print('Relative error for Spline: ', s2_error)
+    
+# -----------------------------------------------------------------------
+    print('We will use now Lagrange Interoplation with our data set:')
+    lagrange_polynomial(list_x, list_fx)
+    print('We evaluate the highest degree Lagrange to find approximation.')
+    lagrange_approx = 0
+    
+    print('We find the relative error:')
+    l2_error = relative_error(actual, lagrange_approx)
+    print('Relative error for Lagrange: ', l2_error)
+    
+# -----------------------------------------------------------------------
+    print('We will use now Nevilles method with a data set:')
+    nevillesMethod(x2, list_x, list_fx, Q_table = None\
+                   , individual = 'no',notable = 'no')
+    print('We consider the Q_4,4 th table entry - The highest degree approximation.')
+    neville_approx = 0
+    
+    print('We find the relative error:')
+    n2_error = relative_error(actual, neville_approx)
+    print('Relative error for Neville: ', n2_error)
+ # =========================================================================
+ # ======================== x3 = 83 degrees Celcius ======================== 
+    print('We find the actual value f(x):')
+    actual = find_real(fx,x3)
+
+    print('We will use now Cubic Spline Interoplation with our data set:')
+    splineConstructor(list_x, list_fx, factor_it = 'yes')
+    print('We evaluate the necessary spline function to find approximation.')
+    spline_approx = 0
+    
+    print('We find the relative error:')
+    s3_error = relative_error(actual, spline_approx)
+    print('Relative error for Spline: ', s3_error)
+    
+# -----------------------------------------------------------------------
+    print('We will use now Lagrange Interoplation with our data set:')
+    lagrange_polynomial(list_x, list_fx)
+    print('We evaluate the highest degree Lagrange to find approximation.')
+    lagrange_approx = 0
+    
+    print('We find the relative error:')
+    l3_error = relative_error(actual, lagrange_approx)
+    print('Relative error for Lagrange: ', l3_error)
+    
+# -----------------------------------------------------------------------
+    print('We will use now Nevilles method with a data set:')
+    nevillesMethod(x3, list_x, list_fx, Q_table = None\
+                   , individual = 'no',notable = 'no')
+    print('We consider the Q_4,4 th table entry - The highest degree approximation.')
+    neville_approx = 0
+    
+    print('We find the relative error:')
+    n3_error = relative_error(actual, neville_approx)
+    print('Relative error for Neville: ', n3_error)
+# ======================================================================== 
 
 
-    #--------------------------------
+# Find actual value:
+def find_real(fx,x):
+    exact_val = 1
+    return exact_val
 
-    # Find relative error
-    #relative_error(real, approx)
-
-    # Compare results
 
 #  Relative error function
 
-def relative_error(real, approx):
-    y = abs(real - approx) / abs(real)
-    return y
+def relative_error(actual, approx):
+    rel_error = abs(actual - approx) / abs(actual)
+    return rel_error
+
+# Spline Interpolation Method
 
 def vec(m): z = [0]*m ; return(z)
 def splineConstructor(list_x, list_fx, factor_it = 'yes'):
@@ -84,11 +170,9 @@ def splineConstructor(list_x, list_fx, factor_it = 'yes'):
         if factor_it == 'no':
             s_jx = round(list_fx[j],6) +  (round(b[j],6)*(x - list_x[j]))             + round(c[j],6)*(x - list_x[j])**2 + round(d[j],6)*(x - list_x[j])**3
             print('S _',j,'(x) =', s_jx, ' --> for ['                  , list_x[j],',', list_x[j+1],']')
-            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j],' , ', c[j], ' , ', d[j],'\n''------------------------------------------'                  '--------------------------\n')
         if factor_it == 'yes':
             s_jx = round(list_fx[j],6) +  factor((round(b[j],6)*(x - list_x[j])))             + round(c[j],6)*(x - list_x[j])**2 + round(d[j],6)*(x - list_x[j])**3
             print('S _',j,'(x) =', s_jx, ' --> for ['                  , list_x[j],',', list_x[j+1],']')
-            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j],' , ', c[j], ' , ', d[j],'\n''------------------------------------------'                  '--------------------------\n')
     return
 
 # Neville's Method
@@ -113,10 +197,11 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable
     return Q_table[n][n], Q_table; 
 
 
-# Lagrange Interpolation
+# Lagrange Interpolation Method
 
-def lagrange_polynomial(nodes, function_nodes, x, degree_specification):
-    # nth_degree = len(nodes) - 1
+def lagrange_polynomial(nodes, function_nodes):
+    degree_specification = len(nodes) - 1
+    x = Symbol("x")
     whole_polynomial = 0
     nodes = nodes[:degree_specification + 1]
     for coefficients in range(0, len(nodes)):
@@ -125,10 +210,14 @@ def lagrange_polynomial(nodes, function_nodes, x, degree_specification):
         coeffcient_polynomial_numerator = 1
         coeffcient_polynomial_denominator = 1
         for remaining_nodes in rest_of_nodes:
-            coeffcient_polynomial_numerator = coeffcient_polynomial_numerator * (x - remaining_nodes)
+            coeffcient_polynomial_numerator = coeffcient_polynomial_numerator \
+                                              * (x - remaining_nodes)
         for remaining_nodes2 in rest_of_nodes:
-            coeffcient_polynomial_denominator = coeffcient_polynomial_denominator * (current_node - remaining_nodes2)
-        coeffient_polynomial = function_nodes[coefficients] * (coeffcient_polynomial_numerator / coeffcient_polynomial_denominator)
+            coeffcient_polynomial_denominator = coeffcient_polynomial_denominator \
+                                                * (current_node - remaining_nodes2)
+        coeffient_polynomial = function_nodes[coefficients] \
+                               * (coeffcient_polynomial_numerator \
+                                  / coeffcient_polynomial_denominator)
         whole_polynomial += coeffient_polynomial
     return whole_polynomial
 
