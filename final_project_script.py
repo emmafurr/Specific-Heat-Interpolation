@@ -115,7 +115,7 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable
 
 # Lagrange Interpolation
 
-def lagrange_polynomial(nodes, function, x, degree_specification):
+def lagrange_polynomial(nodes, function_nodes, x, degree_specification):
     # nth_degree = len(nodes) - 1
     whole_polynomial = 0
     nodes = nodes[:degree_specification + 1]
@@ -128,7 +128,7 @@ def lagrange_polynomial(nodes, function, x, degree_specification):
             coeffcient_polynomial_numerator = coeffcient_polynomial_numerator * (x - remaining_nodes)
         for remaining_nodes2 in rest_of_nodes:
             coeffcient_polynomial_denominator = coeffcient_polynomial_denominator * (current_node - remaining_nodes2)
-        coeffient_polynomial = function(current_node) * (coeffcient_polynomial_numerator / coeffcient_polynomial_denominator)
+        coeffient_polynomial = function_nodes[coefficients] * (coeffcient_polynomial_numerator / coeffcient_polynomial_denominator)
         whole_polynomial += coeffient_polynomial
     return whole_polynomial
 
