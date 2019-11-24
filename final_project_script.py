@@ -42,17 +42,16 @@ def splineConstructor(list_x, list_fx, factor_it = 'yes'):
         if factor_it == 'no':
             s_jx = round(list_fx[j],6) +  (round(b[j],6)*(x - list_x[j]))             + round(c[j],6)*(x - list_x[j])**2 + round(d[j],6)*(x - list_x[j])**3
             print('S _',j,'(x) =', s_jx, ' --> for ['                  , list_x[j],',', list_x[j+1],']')
-            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j]                  ,' , ', c[j], ' , ', d[j],'\n'                  '------------------------------------------'                  '--------------------------\n')
+            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j],' , ', c[j], ' , ', d[j],'\n''------------------------------------------'                  '--------------------------\n')
         if factor_it == 'yes':
             s_jx = round(list_fx[j],6) +  factor((round(b[j],6)*(x - list_x[j])))             + round(c[j],6)*(x - list_x[j])**2 + round(d[j],6)*(x - list_x[j])**3
             print('S _',j,'(x) =', s_jx, ' --> for ['                  , list_x[j],',', list_x[j+1],']')
-            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j]                  ,' , ', c[j], ' , ', d[j],'\n'                  '------------------------------------------'                  '--------------------------\n')
+            print('\nCoefficients (ai, bi, ci, di):\n\n ',list_fx[j],' , ', b[j],' , ', c[j], ' , ', d[j],'\n''------------------------------------------'                  '--------------------------\n')
     return
-
 
 # Neville's Method
 
-def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',                    notable = 'no'):
+def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',notable = 'no'):
     n = np.size(list_x) - 1; 
     if (Q_table == None):
         Q_table = np.zeros((n + 1, n + 1));
@@ -63,7 +62,7 @@ def nevillesMethod(x, list_x, list_fx, Q_table = None, individual = 'no',       
     for i in range(1, n + 1):
         for j in np.arange(1, i + 1):
             Q_table[i][j] = 0.0
-            Q_table[i][j] += (((x - list_x[i - j])*Q_table[i][j - 1]                             - (x - list_x[i])*(Q_table[i - 1][j - 1]))                            /(list_x[i] - list_x[i - j]))
+            Q_table[i][j] += (((x - list_x[i - j])*Q_table[i][j - 1]- (x - list_x[i])*(Q_table[i - 1][j - 1]))/(list_x[i] - list_x[i - j]))
             if individual == 'yes' and i == j:
                 print('Q_(',i,',',j,') =',Q_table[i][j])
                 
