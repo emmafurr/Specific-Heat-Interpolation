@@ -24,6 +24,7 @@ def main():
 
     list_x2 = [10,30,50,70,90]
     list_fx2 = [4192, 4178,4182, 4191, 4208]
+
     x = 25
     fx = 4180
 
@@ -33,6 +34,7 @@ def main():
 # -----------------------------------------------------------------------
 
 # ======================== x = 25 degrees Celcius ======================== 
+    print('\nFor x = 25, we approximate f(x) with the following three methods: \n\n')
     print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
     splineConstructor(list_x2, list_fx2, factor_it = 'yes')
     print('We evaluate the necessary spline function to find approximation.\n')
@@ -78,6 +80,7 @@ def main():
 # =========================================================================
 
 # ======================== x = 75 degrees Celcius ========================
+    print('\nFor x = 75, we approximate f(x) with the following three methods: \n\n')
     print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
     splineConstructor(list_x2, list_fx2, factor_it='yes')
     print('We evaluate the necessary spline function to find approximation.\n')
