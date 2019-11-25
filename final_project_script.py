@@ -21,46 +21,107 @@ def main():
 # -----------------------------------------------------------------------
     list_x = [22,42,52,82,100]
     list_fx = [4181,4179,4186,4199,4217]
+
+    list_x2 = [10,30,50,70,90]
+    list_fx2 = [4192, 4178,4182, 4191, 4208]
     x = 25
     fx = 4180
+
+    z = 85
+    fz = 4203
+
 # -----------------------------------------------------------------------
 
 # ======================== x = 25 degrees Celcius ======================== 
     print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
-    splineConstructor(list_x, list_fx, factor_it = 'yes')
+    splineConstructor(list_x2, list_fx2, factor_it = 'yes')
     print('We evaluate the necessary spline function to find approximation.\n')
-    def c(x):
-        return -8.680364*(0.0454545454545454*x - 1.0) + 0.000736*(x - 22)**3 + 4181
+    def c1(x):
+        #return -8.680364*(0.0454545454545454*x - 1.0) + 0.000736*(x - 22)**3 + 4181
+        return -9.30357*(0.1*x - 1.0) + 0.000576*(x - 10)**3 + 4192
     
-    spline_approx = c(25)
+    spline_approx = c1(25)
     print('FINAL APPROXIMATION:', spline_approx)
     print('\nWe find the relative error:\n')
-    s1_error = relative_error(4181.3, spline_approx)
+    s1_error = relative_error(4180, spline_approx)
     print('Relative error for Spline: \n', s1_error)
     
 # -----------------------------------------------------------------------
     print('\n\n\n\nWe will use now Lagrange Interoplation with our data set:\n')
-    lagrange_polynomial(list_x, list_fx)
+    abc = lagrange_polynomial(list_x2, list_fx2)
+    print(abc)
     print('We evaluate the highest degree Lagrange to find approximation.\n')
-    def g(x):
-        return 4181*(x - 100)*(x - 82)*(x - 52)*(x - 42)/2808000 - 4179*(x - 100)*(x - 82)*(x - 52)*(x - 22)/464000 + 2093*(x - 100)*(x - 82)*(x - 42)\
-               *(x - 22)/216000 - 4199*(x - 100)*(x - 52)*(x - 42)*(x - 22)/1296000 \
-               + 4217*(x - 82)*(x - 52)*(x - 42)*(x - 22)/3908736
-    lag_approx = g(25)
+    def g1(x):
+#        return 4181*(x - 100)*(x - 82)*(x - 52)*(x - 42)/2808000 - 4179*(x - 100)*(x - 82)*(x - 52)*(x - 22)/464000 + 2093*(x - 100)*(x - 82)*(x - 42)\
+#               *(x - 22)/216000 - 4199*(x - 100)*(x - 52)*(x - 42)*(x - 22)/1296000 \
+#               + 4217*(x - 82)*(x - 52)*(x - 42)*(x - 22)/3908736
+        return 131*(x - 90)*(x - 70)*(x - 50)*(x - 30)/120000 - 2089*(x - 90)*(x - 70)*(x - 50)\
+            *(x - 10)/480000 + 2091*(x - 90)*(x - 70)*(x - 30)*(x - 10)/320000 - \
+                1397*(x - 90)*(x - 50)*(x - 30)*(x - 10)/320000 + 263*(x - 70)*(x - 50)*\
+                    (x - 30)*(x - 10)/240000
+    lag_approx = g1(25)
     print('FINAL APPROXIMATION:', lag_approx)
     print('\nWe find the relative error:\n')
-    l1_error = relative_error(4181.3, lag_approx)
+    l1_error = relative_error(4181, lag_approx)
     print('Relative error for Lagrange: ', l1_error)
     
 # -----------------------------------------------------------------------
     print('\n\n\n\nWe will use now Nevilles method with a data set:')
-    nev_approx,n_table = nevillesMethod(x, list_x, list_fx, Q_table = None\
+    nev_approx,n_table = nevillesMethod(x, list_x2, list_fx2, Q_table = None\
                    , individual = 'yes',notable = 'no')
     print(n_table)
     print('\n\n FINAL APPROXIMATION: ', nev_approx)
     print('We consider the Q_4,4 th table entry - The highest degree approximation.\n') 
     print('\nWe find the relative error:\n')
-    n1_error = relative_error(4181.3, nev_approx)
+    n1_error = relative_error(4180, nev_approx)
+    print('Relative error for Neville: \n', n1_error)
+# =========================================================================
+
+# ======================== x = 75 degrees Celcius ========================
+    print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
+    splineConstructor(list_x2, list_fx2, factor_it='yes')
+    print('We evaluate the necessary spline function to find approximation.\n')
+
+    def c(x):
+        #return -8.680364*(0.0454545454545454*x - 1.0) + 0.000736*(x - 22)**3 + 4181
+        return 44.75002*(0.0142857142857143*x - 1.0) -\
+             0.000263*(x - 70)**3 + 0.015804*(x - 70)**2 + 4191
+
+    spline_approx = c(85)
+    print('FINAL APPROXIMATION:', spline_approx)
+    print('\nWe find the relative error:\n')
+    s1_error = relative_error(4203, spline_approx)
+    print('Relative error for Spline: \n', s1_error)
+
+# -----------------------------------------------------------------------
+    print('\n\n\n\nWe will use now Lagrange Interoplation with our data set:\n')
+    abc = lagrange_polynomial(list_x2, list_fx2)
+    print(abc)
+    print('We evaluate the highest degree Lagrange to find approximation.\n')
+
+    def g(x):
+        #        return 4181*(x - 100)*(x - 82)*(x - 52)*(x - 42)/2808000 - 4179*(x - 100)*(x - 82)*(x - 52)*(x - 22)/464000 + 2093*(x - 100)*(x - 82)*(x - 42)\
+        #               *(x - 22)/216000 - 4199*(x - 100)*(x - 52)*(x - 42)*(x - 22)/1296000 \
+        #               + 4217*(x - 82)*(x - 52)*(x - 42)*(x - 22)/3908736
+        return 131*(x - 90)*(x - 70)*(x - 50)*(x - 30)/120000 - 2089*(x - 90)*(x - 70)*(x - 50)\
+            * (x - 10)/480000 + 2091*(x - 90)*(x - 70)*(x - 30)*(x - 10)/320000 - \
+            1397*(x - 90)*(x - 50)*(x - 30)*(x - 10)/320000 + 263*(x - 70)*(x - 50) *\
+            (x - 30)*(x - 10)/240000
+    lag_approx = g(85)
+    print('FINAL APPROXIMATION:', lag_approx)
+    print('\nWe find the relative error:\n')
+    l1_error = relative_error(4203, lag_approx)
+    print('Relative error for Lagrange: ', l1_error)
+
+# -----------------------------------------------------------------------
+    print('\n\n\n\nWe will use now Nevilles method with a data set:')
+    nev_approx, n_table = nevillesMethod(
+        z, list_x2, list_fx2, Q_table=None, individual='yes', notable='no')
+    print(n_table)
+    print('\n\n FINAL APPROXIMATION: ', nev_approx)
+    print('We consider the Q_4,4 th table entry - The highest degree approximation.\n')
+    print('\nWe find the relative error:\n')
+    n1_error = relative_error(4203, nev_approx)
     print('Relative error for Neville: \n', n1_error)
 # =========================================================================
 #  Relative error function
