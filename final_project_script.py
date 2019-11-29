@@ -33,9 +33,18 @@ def main():
 
 # -----------------------------------------------------------------------
 
-# ======================== x = 25 degrees Celcius ======================== 
-    print('\nFor x = 25, we approximate f(x) with the following three methods: \n\n')
-    print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
+# ======================== x = 25 degrees Celcius ========================
+    print('\nWe will be using two data sets of temperatures (nodes) and\
+          \nSpecific Heats (nodes evaluated at function).\n\n\n')
+    print('--------------------------------------------------------------------------')
+    print(' X = 25 DEGREES CELCIUS: \n')
+    print('For x = 25 degrees Celcius, we have that our actual Specific Heat is 4180.')
+    print('Our nodes (water temperatures) are:            [22,42,52,82,100]')
+    print('Our Specific heats evaluated at the nodes are: [4181,4179,4186,4199,4217]')
+    print('We now approximate f(x) with several interpolation methods:)')
+    print('--------------------------------------------------------------------------\n\n\n')
+    print('--------------------------------------------------------------------------')
+    print('We will now use Cubic Spline Interpolation with our data set:\n')
     splineConstructor(list_x2, list_fx2, factor_it = 'yes')
     print('We evaluate the necessary spline function to find approximation.\n')
     def c1(x):
@@ -46,10 +55,11 @@ def main():
     print('FINAL APPROXIMATION:', spline_approx)
     print('\nWe find the relative error:\n')
     s1_error = relative_error(4180, spline_approx)
-    print('Relative error for Spline: \n', s1_error)
-    
+    print('Relative error for Spline: ', s1_error)
+    print('--------------------------------------------------------------------------\n\n\n')
 # -----------------------------------------------------------------------
-    print('\n\n\n\nWe will use now Lagrange Interoplation with our data set:\n')
+    print('--------------------------------------------------------------------------')
+    print('We will now use Lagrange Interoplation with our data set:\n')
     abc = lagrange_polynomial(list_x2, list_fx2)
     print(abc)
     print('We evaluate the highest degree Lagrange to find approximation.\n')
@@ -66,9 +76,12 @@ def main():
     print('\nWe find the relative error:\n')
     l1_error = relative_error(4181, lag_approx)
     print('Relative error for Lagrange: ', l1_error)
+    print('--------------------------------------------------------------------------\n\n\n')
+    print('--------------------------------------------------------------------------')
+    
     
 # -----------------------------------------------------------------------
-    print('\n\n\n\nWe will use now Nevilles method with a data set:')
+    print('We will now use Nevilles method with our data set:')
     nev_approx,n_table = nevillesMethod(x, list_x2, list_fx2, Q_table = None\
                    , individual = 'yes',notable = 'no')
     print(n_table)
@@ -76,11 +89,19 @@ def main():
     print('We consider the Q_4,4 th table entry - The highest degree approximation.\n') 
     print('\nWe find the relative error:\n')
     n1_error = relative_error(4180, nev_approx)
-    print('Relative error for Neville: \n', n1_error)
+    print('Relative error for Neville: ', n1_error)
+    print('--------------------------------------------------------------------------\n\n\n')
 # =========================================================================
 
-# ======================== x = 75 degrees Celcius ========================
-    print('\nFor x = 75, we approximate f(x) with the following three methods: \n\n')
+# ======================== x = 85 degrees Celcius ========================
+    print('--------------------------------------------------------------------------')
+    print(' X = 85 DEGREES CELCIUS: ')
+    print('\nFor x = 85 degrees Celcius, we have that our actual Specific Heat is 4203.')
+    print('Our nodes (water temperatures) are:            [10,30,50,70,90]')
+    print('Our Specific heats evaluated at the nodes are: [4192,4178,4182,4191,4208]')
+    print('We now approximate f(x) with several interpolation methods: ')
+    print('--------------------------------------------------------------------------\n\n\n')
+    print('--------------------------------------------------------------------------')
     print('\nWe will use now Cubic Spline Interoplation with our data set:\n')
     splineConstructor(list_x2, list_fx2, factor_it='yes')
     print('We evaluate the necessary spline function to find approximation.\n')
@@ -94,10 +115,12 @@ def main():
     print('FINAL APPROXIMATION:', spline_approx)
     print('\nWe find the relative error:\n')
     s1_error = relative_error(4203, spline_approx)
-    print('Relative error for Spline: \n', s1_error)
+    print('Relative error for Spline: ', s1_error)
+    print('--------------------------------------------------------------------------\n\n\n')
+    print('--------------------------------------------------------------------------')
 
 # -----------------------------------------------------------------------
-    print('\n\n\n\nWe will use now Lagrange Interoplation with our data set:\n')
+    print('We will use now Lagrange Interoplation with our data set:\n')
     abc = lagrange_polynomial(list_x2, list_fx2)
     print(abc)
     print('We evaluate the highest degree Lagrange to find approximation.\n')
@@ -115,9 +138,11 @@ def main():
     print('\nWe find the relative error:\n')
     l1_error = relative_error(4203, lag_approx)
     print('Relative error for Lagrange: ', l1_error)
+    print('--------------------------------------------------------------------------\n\n\n')
+    print('--------------------------------------------------------------------------')
 
 # -----------------------------------------------------------------------
-    print('\n\n\n\nWe will use now Nevilles method with a data set:')
+    print('We will use now Nevilles method with a data set:')
     nev_approx, n_table = nevillesMethod(
         z, list_x2, list_fx2, Q_table=None, individual='yes', notable='no')
     print(n_table)
@@ -125,7 +150,8 @@ def main():
     print('We consider the Q_4,4 th table entry - The highest degree approximation.\n')
     print('\nWe find the relative error:\n')
     n1_error = relative_error(4203, nev_approx)
-    print('Relative error for Neville: \n', n1_error)
+    print('Relative error for Neville: ', n1_error)
+    print('--------------------------------------------------------------------------')
 # =========================================================================
 #  Relative error function
 
