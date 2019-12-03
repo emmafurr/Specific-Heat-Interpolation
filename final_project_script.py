@@ -13,6 +13,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from sympy import Symbol, poly, factor, expand
 
 
+
 def main():
 
 # We use x = 24, x = 56, x = 83
@@ -145,6 +146,20 @@ def main():
     print('Relative error for Neville: ', n1_error)
     print('--------------------------------------------------------------------------')
 
+    print(" ");
+    print("Plottting the results.")
+
+    plt.figure(1, facecolor='white');
+    plt.clf();
+    plt.plot(list_x2, list_fx2, '.', linewidth=1.0, markersize=12, color='blue');
+    xx = np.linspace(-math.pi,math.pi,int(1e2));
+    yy = np.cos(xx);
+    plt.plot(xx, yy, '-', linewidth=1.0, markersize=12, color='blue');
+    plt.plot(z, nev_approx, '.', markersize=15, color='red');
+    plt.xlabel('x');
+    plt.ylabel('y');
+    plt.title("Neville's Method");
+    plt.draw();
 # =========================================================================
 #  Relative error function
 
