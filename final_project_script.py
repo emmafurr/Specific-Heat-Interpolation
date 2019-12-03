@@ -238,3 +238,25 @@ def lagrange_polynomial(nodes, function_nodes):
 
 # Call the main function.
 main()
+
+
+
+# HERMITE FUNCTION CODE
+def hermite_interpolation_polynomial(x_i, f_xi, f_prime_xi):
+    n = np.size(x_i) - 1
+    z_array = np.zeros(2 * n + 2)
+    q_matrix = np.zeros((2 * n + 2, 2 * n + 2))
+    for i in range(0, n + 1):
+        z_array[2 * i] = x_i[i]
+        z_array[(2 * i) + 1] = x_i[i]
+        q_matrix[2 * i][0] = f_xi[i]
+        q_matrix[(2 * i) + 1][0] = f_xi[i]
+        q_matrix[(2 * i) + 1][1] = f_prime_xi[i]
+        if i != 0:
+            q_matrix[(2 * i)][1] = (q_matrix[(2 * i)][0] - q_matrix[(2 * i) - 1]
+                                    [0]) / (z_array[2 * i] - z_array[(2 * i) - 1])
+    for i in range(2, (2 * n) + 2):
+        for j in range(2, i + 1):
+            q_matrix[i][j] = (q_matrix[i][j - 1] - q_matrix[i - 1]
+                              [j - 1]) / (z_array[i] - z_array[i - j])
+    return q_matrix
