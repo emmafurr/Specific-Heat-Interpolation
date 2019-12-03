@@ -5,23 +5,19 @@
 import numpy as np
 import mpmath as mp
 import math
-import pandas as pd
 import string
 import matplotlib.pyplot as plt
+from sympy.plotting import plot
 import scipy
 from mpl_toolkits.mplot3d import Axes3D
 from sympy import Symbol, poly, factor, expand
 
-
-
 def main():
-
-# We use x = 24, x = 56, x = 83
     
 # Our data set:
 # -----------------------------------------------------------------------
-    list_x = [22,42,52,82,100]
-    list_fx = [4181,4179,4186,4199,4217]
+    list_x = [20,40,50,80,90]
+    list_fx = [4182,4179,4182,4198,4208]
 
     list_x2 = [10,30,50,70,90]
     list_fx2 = [4192, 4178,4182, 4191, 4208]
@@ -34,23 +30,22 @@ def main():
 
 # -----------------------------------------------------------------------
 
-# ======================== x = 25 degrees Celcius ========================
+# ======================== x = 25 degrees CELSIUS ========================
     print('\nWe will be using two data sets of temperatures (nodes) and\
           \nSpecific Heats (nodes evaluated at function).\n\n\n')
     print('--------------------------------------------------------------------------')
-    print(' X = 25 DEGREES CELCIUS: \n')
-    print('For x = 25 degrees Celcius, we have that our actual Specific Heat is 4180.')
+    print(' X = 25 DEGREES CELSIUS: \n')
+    print('For x = 25 degrees CELSIUS, we have that our actual Specific Heat is 4180.')
     print('Our nodes (water temperatures) are:            [22,42,52,82,100]')
     print('Our Specific heats evaluated at the nodes are: [4181,4179,4186,4199,4217]')
     print('We now approximate f(x) with several interpolation methods:)')
     print('--------------------------------------------------------------------------\n\n\n')
     print('--------------------------------------------------------------------------')
     print('We will now use Cubic Spline Interpolation with our data set:\n')
-    splineConstructor(list_x2, list_fx2, factor_it = 'yes')
+    splineConstructor(list_x, list_fx, factor_it = 'yes')
     print('We evaluate the necessary spline function to find approximation.\n')
     def c1(x):
-        return -9.30357*(0.1*x - 1.0) + 0.000576*(x - 10)**3 + 4192
-    
+        return -6.01656*(0.05*x - 1.0) + 0.000377*(x - 20)**3 + 4182
     spline_approx = c1(25)
     print('FINAL APPROXIMATION:', spline_approx)
     print('\nWe find the relative error:\n')
@@ -60,18 +55,19 @@ def main():
 # -----------------------------------------------------------------------
     print('--------------------------------------------------------------------------')
     print('We will now use Lagrange Interoplation with our data set:\n')
-    abc = lagrange_polynomial(list_x2, list_fx2)
+    abc = lagrange_polynomial(list_x, list_fx)
     print(abc)
     print('We evaluate the highest degree Lagrange to find approximation.\n')
     def g1(x):
-        return 131*(x - 90)*(x - 70)*(x - 50)*(x - 30)/120000 - 2089*(x - 90)*(x - 70)*(x - 50)\
-            *(x - 10)/480000 + 2091*(x - 90)*(x - 70)*(x - 30)*(x - 10)/320000 - \
-                1397*(x - 90)*(x - 50)*(x - 30)*(x - 10)/320000 + 263*(x - 70)*(x - 50)*\
-                    (x - 30)*(x - 10)/240000
+        return 697*(x - 90)*(x - 80)*(x - 50)*(x - 40)/420000 - 4179*(x - 90)*(x - 80)\
+               *(x - 50)*(x - 20)/400000 + 697*(x - 90)*(x - 80)*(x - 40)*(x - 20)/60000 \
+               - 2099*(x - 90)*(x - 50)*(x - 40)*(x - 20)/360000 + 263*(x - 80)*(x - 50)\
+               *(x - 40)*(x - 20)/87500
+
     lag_approx = g1(25)
     print('FINAL APPROXIMATION:', lag_approx)
     print('\nWe find the relative error:\n')
-    l1_error = relative_error(4181, lag_approx)
+    l1_error = relative_error(4180, lag_approx)
     print('Relative error for Lagrange: ', l1_error)
     print('--------------------------------------------------------------------------\n\n\n')
     print('--------------------------------------------------------------------------')
@@ -79,21 +75,28 @@ def main():
     
 # -----------------------------------------------------------------------
     print('We will now use Nevilles method with our data set:')
-    nev_approx,n_table = nevillesMethod(x, list_x2, list_fx2, Q_table = None\
+    nev_approx,n_table = nevillesMethod(x, list_x, list_fx, Q_table = None\
                    , individual = 'yes',notable = 'no')
     print(n_table)
-    print('\n\n FINAL APPROXIMATION: ', nev_approx)
+    def truncate(f, n):
+        s = '{}'.format(f)
+        if 'e' in s or 'E' in s:
+            return '{0:.{1}f}'.format(f, n)
+        i, p, d = s.partition('.')
+        return '.'.join([i, (d+'0'*n)[:n]])
+    
+    print('\n\n FINAL APPROXIMATION: ', truncate(nev_approx,12))
     print('We consider the Q_4,4 th table entry - The highest degree approximation.\n') 
     print('\nWe find the relative error:\n')
-    n1_error = relative_error(4180, nev_approx)
+    n1_error = relative_error(4180, float(truncate(nev_approx,12)))
     print('Relative error for Neville: ', n1_error)
     print('--------------------------------------------------------------------------\n\n\n')
 # =========================================================================
 
-# ======================== x = 85 degrees Celcius ========================
+# ======================== x = 85 degrees CELSIUS ========================
     print('--------------------------------------------------------------------------')
-    print(' X = 85 DEGREES CELCIUS: ')
-    print('\nFor x = 85 degrees Celcius, we have that our actual Specific Heat is 4203.')
+    print(' X = 85 DEGREES CELSIUS: ')
+    print('\nFor x = 85 degrees CELSIUS, we have that our actual Specific Heat is 4203.')
     print('Our nodes (water temperatures) are:            [10,30,50,70,90]')
     print('Our Specific heats evaluated at the nodes are: [4192,4178,4182,4191,4208]')
     print('We now approximate f(x) with several interpolation methods: ')
@@ -145,21 +148,6 @@ def main():
     n1_error = relative_error(4203, nev_approx)
     print('Relative error for Neville: ', n1_error)
     print('--------------------------------------------------------------------------')
-
-    print(" ");
-    print("Plottting the results.")
-
-    plt.figure(1, facecolor='white');
-    plt.clf();
-    plt.plot(list_x2, list_fx2, '.', linewidth=1.0, markersize=12, color='blue');
-    xx = np.linspace(-math.pi,math.pi,int(1e2));
-    yy = np.cos(xx);
-    plt.plot(xx, yy, '-', linewidth=1.0, markersize=12, color='blue');
-    plt.plot(z, nev_approx, '.', markersize=15, color='red');
-    plt.xlabel('x');
-    plt.ylabel('y');
-    plt.title("Neville's Method");
-    plt.draw();
 # =========================================================================
 #  Relative error function
 
