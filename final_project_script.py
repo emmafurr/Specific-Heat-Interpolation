@@ -257,8 +257,8 @@ def hermite_interpolation_polynomial(x_i, f_xi, f_prime_xi):
         for j in range(2, i + 1):
             q_matrix[i][j] = (q_matrix[i][j - 1] - q_matrix[i - 1]
                               [j - 1]) / (z_array[i] - z_array[i - j])
-    return q_matrix
-
-
+    print("Approximating polynomial using Hermite Interpolation is {} + {} * (x - {}) + {} * (x - {})^2 + {} * (x - {})^2 * (x - {}) + {} * (x - {})^2 * (x - {})^2".format(
+    q_matrix_1c[0][0], q_matrix_1c[1][1], x_i_1c[0], q_matrix_1c[2][2], x_i_1c[0], q_matrix_1c[3][3], x_i_1c[0], x_i_1c[1], q_matrix_1c[4][4], x_i_1c[0], x_i_1c[1]))
+    return
 # Call the main function.
 main()
