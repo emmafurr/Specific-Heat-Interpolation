@@ -144,18 +144,6 @@ def main():
     n1_error = relative_error(4203, nev_approx)
     print('Relative error for Neville: ', n1_error)
     print('--------------------------------------------------------------------------')
-# -----------------------------------------------------------------------
-    print('We will use now Hermite method with a data set:')
-    herm_approx, n_table = nevillesMethod(
-        z, list_x2, list_fx2, Q_table=None, individual='yes', notable='no')
-    print(n_table)
-    print('\n\n FINAL APPROXIMATION: ', nev_approx)
-    print('We consider the Q_4,4 th table entry - The highest degree approximation.\n')
-    print('\nWe find the relative error:\n')
-    n1_error = relative_error(4203, nev_approx)
-    print('Relative error for Neville: ', n1_error)
-    print('--------------------------------------------------------------------------')
-
 
 # =========================================================================
 #  Relative error function
@@ -239,26 +227,5 @@ def lagrange_polynomial(nodes, function_nodes):
         whole_polynomial += coeffient_polynomial
     return whole_polynomial
 
-# Hermite Interpolation Method
-def hermite_interpolation_polynomial(x_i, f_xi, f_prime_xi):
-    n = np.size(x_i) - 1
-    z_array = np.zeros(2 * n + 2)
-    q_matrix = np.zeros((2 * n + 2, 2 * n + 2))
-    for i in range(0, n + 1):
-        z_array[2 * i] = x_i[i]
-        z_array[(2 * i) + 1] = x_i[i]
-        q_matrix[2 * i][0] = f_xi[i]
-        q_matrix[(2 * i) + 1][0] = f_xi[i]
-        q_matrix[(2 * i) + 1][1] = f_prime_xi[i]
-        if i != 0:
-            q_matrix[(2 * i)][1] = (q_matrix[(2 * i)][0] - q_matrix[(2 * i) - 1]
-                                    [0]) / (z_array[2 * i] - z_array[(2 * i) - 1])
-    for i in range(2, (2 * n) + 2):
-        for j in range(2, i + 1):
-            q_matrix[i][j] = (q_matrix[i][j - 1] - q_matrix[i - 1]
-                              [j - 1]) / (z_array[i] - z_array[i - j])
-    print("Approximating polynomial using Hermite Interpolation is {} + {} * (x - {}) + {} * (x - {})^2 + {} * (x - {})^2 * (x - {}) + {} * (x - {})^2 * (x - {})^2".format(
-    q_matrix_1c[0][0], q_matrix_1c[1][1], x_i_1c[0], q_matrix_1c[2][2], x_i_1c[0], q_matrix_1c[3][3], x_i_1c[0], x_i_1c[1], q_matrix_1c[4][4], x_i_1c[0], x_i_1c[1]))
-    return
 # Call the main function.
 main()
