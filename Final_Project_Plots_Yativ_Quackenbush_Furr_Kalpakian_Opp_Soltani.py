@@ -98,9 +98,8 @@ plt.title("Using Data From Table 1")
 plt.xlabel("Temperature(°C)")
 plt.ylabel("Specific Heat (J / kg-°C)")
 plt.legend()
+plt.draw()
 plt.show()
-
-
 
 
 
@@ -160,6 +159,7 @@ plt.title("Using Data From Table 2")
 plt.xlabel("Temperature(°C)")
 plt.ylabel("Specific Heat (J / kg-°C)")
 plt.legend()
+plt.draw()
 plt.show()
 
 
