@@ -1,0 +1,389 @@
+from pylab import *
+from scipy import integrate
+from operator import itemgetter
+from prettytable import PrettyTable
+import numpy
+import math
+import matplotlib.pyplot as p
+
+# ------- Printing Set-up ---------------------
+# Prey Table
+prey_table = PrettyTable()
+prey_table.align = "l" ; prey_table.right_padding_width = 0
+prey_table.left_padding_width = 0  ; prey_table.junction_char = 'o'
+prey_table.vertical_char = '|' ; prey_table.horizontal_char = '-'
+prey_table.field_names = ["x(t)","t", "Relative Error"]
+
+# Predator Table
+pred_table = PrettyTable()
+pred_table.align = "l" ; pred_table.right_padding_width = 0
+pred_table.left_padding_width = 0  ; pred_table.junction_char = 'o'
+pred_table.vertical_char = '|' ; pred_table.horizontal_char = '-'
+pred_table.field_names = ["y(t)","t", "Relative Error"]
+
+np.set_printoptions(precision=8, suppress=True)
+# ----------------------------------------------
+
+def main():
+    #Input values
+    t0 = 0
+    tn = 100
+    h  = 0.01
+    n  = int((tn - t0)/h) - 1
+    x0 = 10
+    y0 = 5
+    t = np.arange(t0,tn,h)
+
+    # ----------------- SciPy Integration Method ---------------------
+    # (1) Compute Results
+    answers = np.array(integrate.odeint(F2, [x0,y0], t))
+    rabbits,foxes = answers.T
+
+    # ----------------- Euler's Method ----------------------------------
+    # (1) Compute Results
+    arr1 = euler2D(t0, tn, n, x0, y0)
+
+    # (2) Print Results
+    print('\nOur results using the Euler Method are: ')
+    print('\n Rabbits (Prey) (Euler Method):')
+    for i in range(0,t.size,int((n+1)/10)):
+        error_E1 = rel_error(answers[i][0],arr1[0][i])
+        prey_table.add_row([arr1[0][i], t[i], error_E1])
+    print(prey_table)
+    print('\nFoxes (Predator) (Euler Method):')
+    for i in range(0,t.size,int((n+1)/10)):
+        error_E2 = rel_error(answers[i][1],arr1[1][i])
+        pred_table.add_row([arr1[1][i], t[i],error_E2])
+    print(pred_table)
+    print('---------------------------------------------------------------')
+
+    # ---------------------------------------------------------------
+    prey_table.clear_rows()  ;  pred_table.clear_rows()
+    # ----------------- RK4 Method ----------------------------------
+    # (1) Compute Results
+    arr2 = RK42D(t0, tn, n, x0, y0)
+    # (2) Print Results
+    print('\nOur results using the Runge Kutta Order 4 Method are: ')
+    print('\nRabbits (Prey) (RK4 Method):')
+    for i in range(0,t.size,int((n+1)/10)):
+        error_R1 = rel_error(answers[i][0],arr2[0][i])
+        prey_table.add_row([arr2[0][i], t[i], error_R1])
+    print(prey_table)
+    print('\nFoxes (Predator) (RK4 Method):')
+    for i in range(0,t.size,int((n+1)/10)):
+        error_R2 = rel_error(answers[i][1],arr2[1][i])
+        pred_table.add_row([arr2[1][i], t[i],error_R2])
+    print(pred_table)
+    print('\n---------------------------------------------------------------')
+
+    # ---------------------------------------------------------------
+    prey_table.clear_rows()   ;   pred_table.clear_rows()
+    # -------------- Adams 4th Predictor Corrector Method -----------
+    # (1) Compute Results
+    arr3 = adamsPredictCorrect(t0, tn, x0, y0, h)
+
+    # (2) Print Results
+    print('\nOur results using the Adams Pred. Corr. Order 4 Method are: ')
+    print('\nRabbits (Prey) (Adams Pred. Corr. Order 4 Method):')
+    for i in range(0, t.size, int((n + 1) / 10)):
+        error_A1 = rel_error(answers[i][0],arr3[0][i])
+        prey_table.add_row([arr3[0][i], t[i], error_A1])
+    print(prey_table)
+    print('\nFoxes (Predator) (Adams Pred. Corr. Order 4 Method):')
+    for i in range(0, t.size, int((n + 1) / 10)):
+        error_A2 = rel_error(answers[i][1],arr3[1][i])
+        pred_table.add_row([arr3[1][i], t[i],error_A2])
+    print(pred_table)
+    print('\n---------------------------------------------------------------')
+
+    # ---------------------------------------------------------------
+    prey_table.clear_rows()   ;   pred_table.clear_rows()
+    # ---------------------------------------------------------------
+    # ----------------- SciPy Integration Method ---------------------
+    # (1) Compute Results
+
+    #(2) Print Results
+    print('\nOur results using the SciPy Integration Method are: ')
+    print('\nRabbits (Prey) (SciPy Integration Method):')
+    for i in range(0, t.size, int((n + 1) / 10)):
+        error_S1 = rel_error(answers[i][0], answers[i][0])
+        prey_table.add_row([answers[i][0], t[i], error_S1])
+    print(prey_table)
+    print('\nFoxes (Predator) (SciPy Integration Method):')
+    for i in range(0, t.size, int((n + 1) / 10)):
+        error_S2 = rel_error(answers[i][1], answers[i][1])
+        pred_table.add_row([answers[i][1], t[i], error_S2])
+    print(pred_table)
+    print('\n---------------------------------------------------------------')
+    # -----------------------------------------------------------------
+    # (*) Graph Results
+    graphIt(t,arr1,'Euler Method')
+    graphIt(t,arr2,'Runge-Kutta Order 4 Method')
+    graphIt(t,arr3,'Adams Predictor Corrector Order 4 Method')
+    graphIt(t,[rabbits,foxes], 'SciPy Integration Method')
+
+# --------------------------------- Lotka-Volterra System + Set-Up ---------------------------------
+# Coefficients
+
+a = 0.9
+b = 0.1
+c = 0.1
+d = 0.4
+
+# Lotka - Volterra System
+def F(t, x, y):
+    return (a * x - b * x * y,c * x * y - d * y) #(Prey,Predator)
+
+def F2(X, t = 0):
+    return (a * X[0] - b * X[0] * X[1],c * X[0] * X[1] - d * X[1]) #(Prey,Predator)
+
+
+"""  Lotka-Volterra Coefficients:
+     a is the natural growing rate of rabbits, when there's no fox
+     b is the natural dying rate of rabbits, due to predation
+     c is the natural dying rate of fox, when there's no rabbit
+     d is the factor describing how many caught rabbits let create a new fox
+"""
+
+# ---------------------------------------------------------------------------------------------------
+# --------------------------------- Algorithms ------------------------------------------------------
+#Forward Euler’s Method
+def euler2D(t0,tn,n,x0,y0):
+    h = abs(tn-t0)/n
+    t = linspace(t0,tn,n+1)
+    x = zeros(n+1)
+    y = zeros(n+1)
+    x[0] = x0
+    y[0] = y0
+    for k in range(0,n):
+        (dx,dy) = F(t[k],x[k],y[k])
+        x[k+1] = x[k] + h*dx
+        y[k+1] = y[k] + h*dy
+    return np.array([x,y])
+
+
+# Runge-Kutta Method - 4th Order
+def RK42D(t0,tn,n,x0,y0):
+    h = abs(tn-t0)/n
+    t = linspace(t0,tn,n+1)
+    x = zeros(n+1)
+    y = zeros(n+1)
+    x[0] = x0
+    y[0] = y0
+    for k in range(0,n):
+        (dx1,dy1) = F(t[k],x[k],y[k])
+        (dx2,dy2) = F(t[k]+h/2,x[k]+dx1*h/2,y[k]+dy1*h/2)
+        (dx3,dy3) = F(t[k]+h/2,x[k]+dx2*h/2,y[k]+dy2*h/2)
+        (dx4,dy4) = F(t[k]+h, x[k]+dx3*h, y[k]+dy3*h)
+        x[k+1] = x[k] + h*(dx1 +2*dx2 +2*dx3 +dx4)/6
+        y[k+1] = y[k] + h*(dy1 +2*dy2 +2*dy3 +dy4)/6
+    return np.array([x,y])
+
+
+# For vector
+def vec(m):
+    z = [0] * m; return (z)
+
+# First item of list
+def Extract_1(lst):
+    return [item[0] for item in lst]
+# Second item of list
+def Extract_2(lst):
+    return [item[1] for item in lst]
+
+
+# Adams Predictor-Corrector
+def adamsPredictCorrect(t0, tn, init_cond_x, init_cond_y, h):
+    N = int((tn - t0) / h)  - 1
+    y = vec(N + 1) ;  x = vec(N + 1)
+    y[0] = round(init_cond_y, 8)  ;  x[0] = round(init_cond_x, 8)
+    t = linspace(t0, tn, N + 1)
+    for k in range(0, N):
+        if k in range(0, 3):
+            (dx1, dy1) = F(t[k], x[k], y[k])
+            (dx2, dy2) = F(t[k] + h / 2, x[k] + dx1 * h / 2, y[k] + dy1 * h / 2)
+            (dx3, dy3) = F(t[k] + h / 2, x[k] + dx2 * h / 2, y[k] + dy2 * h / 2)
+            (dx4, dy4) = F(t[k] + h, x[k] + dx3 * h, y[k] + dy3 * h)
+            x[k + 1] = x[k] + h * (dx1 + 2 * dx2 + 2 * dx3 + dx4) / 6
+            y[k + 1] = y[k] + h * (dy1 + 2 * dy2 + 2 * dy3 + dy4) / 6
+
+        # Set Up Values
+        (dx, dy) = F(t[k], x[k], y[k])
+        (dx_m1,dy_m1) = F(t[k - 1], x[k - 1], y[k - 1])
+        (dx_m2,dy_m2) = F(t[k - 2], x[k - 1], y[k - 2])
+        (dx_m3,dy_m3) = F(t[k - 3], x[k - 1], y[k - 3])
+
+        #Y(t) and X(t) Predictions
+        y[k + 1] = y[k] + h * ( 55.0 * dy - 59.0 * dy_m1 + 37.0 \
+                                * dy_m2 - 9.0 * dy_m3) / 24.0
+        x[k + 1] = x[k] + h * (55.0 * dx - 59.0 * dx_m1 + 37.0 \
+                               * dx_m2 - 9.0 * dx_m3) / 24.0
+
+        # Evaluate function with predictions
+        (dx_p1,dy_p1) = F(t[k + 1], x[k + 1], y[k + 1])
+
+        # Y(t) and X(t) Corrections
+        y[k + 1] = round(y[k] + h * (9.0 * dy_p1 + 19.0 * dy - 5.0 \
+                                     * dy_m1 + dy_m2) / 24.0,18)
+        x[k + 1] = round(x[k] + h * (9.0 * dx_p1 + 19.0 * dx - 5.0 \
+                                     * dx_m1 + dx_m2) / 24.0, 18)
+    return np.array([x,y])
+
+def graphIt(t,arr, method_used):
+    p.plot(t, arr[0], 'r-', label='Rabbits (Prey)')
+    p.plot(t, arr[1], 'b-', label='Foxes (Predator)')
+    p.grid()
+    p.legend(loc='upper left', fontsize = 'small')
+    p.xlabel('Time')
+    p.ylabel('Population')
+    p.title('Evolution of Fox and Rabbit Populations Via {}: '.format(method_used))
+    p.show()
+def rel_error(actual, approx):
+    return (abs(actual - approx)/abs(actual))
+if __name__ == '__main__':
+    main()
+    
+    
+"""Our results using the Euler Method are: 
+
+ Rabbits (Prey) (Euler Method):
+o------------------o----o--------------------o
+|       x(t)       | t  |   Relative Error   |
+o------------------o----o--------------------o
+|       10.0       |0.0 |        0.0         |
+|4.097594004545756 |10.0|0.019927617200936314|
+|1.526245178955415 |20.0|0.08165178141248146 |
+|0.7247422787340206|30.0|0.14336471463080117 |
+|0.6583349616346318|40.0| 0.1057427246681462 |
+|2.1790177953537584|50.0|0.35657953104575296 |
+| 12.8812865201525 |60.0| 0.6063866438220233 |
+|6.731860138821716 |70.0| 0.363508682612616  |
+|1.915181263593076 |80.0| 0.5801899580352806 |
+|0.6585755433608076|90.0| 0.6331848812100702 |
+o------------------o----o--------------------o
+
+Foxes (Predator) (Euler Method):
+o------------------o----o--------------------o
+|       y(t)       | t  |   Relative Error   |
+o------------------o----o--------------------o
+|       5.0        |0.0 |        0.0         |
+|3.0686039306149415|10.0|0.022082290071836243|
+|3.8345981946505616|20.0|0.012233064898403144|
+|6.368668310556918 |30.0|0.031173461671857614|
+|11.610226732888826|40.0|0.10152721039279151 |
+|19.850046629783684|50.0| 0.1543152597650323 |
+|11.336969301371965|60.0|0.34225681198582236 |
+|2.971905647113104 |70.0| 0.4588076944427426 |
+|2.9916736226040768|80.0|0.05182293290361388 |
+|5.295038439416342 |90.0| 0.4109397906049978 |
+o------------------o----o--------------------o
+---------------------------------------------------------------
+
+Our results using the Runge Kutta Order 4 Method are: 
+
+Rabbits (Prey) (RK4 Method):
+o------------------o----o---------------------o
+|       x(t)       | t  |    Relative Error   |
+o------------------o----o---------------------o
+|       10.0       |0.0 |         0.0         |
+|4.183361138183254 |10.0|0.0005863719684877196|
+|1.6636485410487485|20.0|0.0010244062317022076|
+|0.846751501501196 |30.0|0.0008484883651719632|
+|0.7357293366714817|40.0|0.0006131371787975552|
+|1.5996965744796368|50.0| 0.004085403317796242|
+|7.979158311000877 |60.0| 0.004943076168640623|
+|10.602434951255997|70.0| 0.002450682348867921|
+|4.583403979486401 |80.0| 0.004687678157172774|
+|1.8038961821415478|90.0| 0.00473878662456697 |
+o------------------o----o---------------------o
+
+Foxes (Predator) (RK4 Method):
+o------------------o----o----------------------o
+|       y(t)       | t  |    Relative Error    |
+o------------------o----o----------------------o
+|       5.0        |0.0 |         0.0          |
+|3.1379527536655827|10.0|1.8132060617322212e-05|
+|3.8802738263963152|20.0|0.00046732661550499095|
+|6.170295661338122 |30.0|0.0009457509203389594 |
+|10.52636315110609 |40.0|0.0013049956575388129 |
+|17.175779976844943|50.0|0.0011980679233866403 |
+|17.27757831647224 |60.0| 0.002402771053267109 |
+|5.516799920442317 |70.0|0.0046246492187659236 |
+|3.1566314820392103|80.0|0.00045859211700576013|
+|3.7454188887131425|90.0|0.0019788141233158594 |
+o------------------o----o----------------------o
+
+---------------------------------------------------------------
+
+Our results using the Adams Pred. Corr. Order 4 Method are: 
+
+Rabbits (Prey) (Adams Pred. Corr. Order 4 Method):
+o------------------o----o---------------------o
+|       x(t)       | t  |    Relative Error   |
+o------------------o----o---------------------o
+|       10.0       |0.0 |         0.0         |
+|4.186075552554539 |10.0|0.0012356121220553917|
+|1.6670338449373303|20.0|0.0030613579864551942|
+|0.8505240684515197|30.0| 0.00530760998797848 |
+|0.7393438931510398|40.0| 0.004296739430089947|
+|1.5937094993292704|50.0| 0.007812744882944438|
+|7.8429837280563595|60.0| 0.021925000367584446|
+| 10.6717474609816 |70.0| 0.009004117761505033|
+| 4.68953943822443 |80.0| 0.027952698671817797|
+|1.8613127656859623|90.0| 0.036718824640976706|
+o------------------o----o---------------------o
+
+Foxes (Predator) (Adams Pred. Corr. Order 4 Method):
+o------------------o----o----------------------o
+|       y(t)       | t  |    Relative Error    |
+o------------------o----o----------------------o
+|       5.0        |0.0 |         0.0          |
+|3.139547678962585 |10.0|0.0005264106554500441 |
+|3.882648438050354 |20.0|0.00014435751839942575|
+|6.1687348541835805|30.0| 0.001198466690429113 |
+|10.504694588950976|40.0| 0.003360813461366162 |
+|17.10569492736965 |50.0| 0.00527363729607171  |
+|17.36014081220915 |60.0| 0.007192844812206321 |
+|5.6413419241845215|70.0| 0.027304095388074004 |
+|3.185340337823554 |80.0| 0.009557538763999245 |
+|3.7278392999427945|90.0| 0.006663150522824772 |
+o------------------o----o----------------------o
+
+---------------------------------------------------------------
+
+Our results using the SciPy Integration Method are: 
+
+Rabbits (Prey) (SciPy Integration Method):
+o------------------o----o--------------o
+|       x(t)       | t  |Relative Error|
+o------------------o----o--------------o
+|       10.0       |0.0 |     0.0      |
+|4.180909570008619 |10.0|     0.0      |
+|1.6619460331756106|20.0|     0.0      |
+|0.8460336517911073|30.0|     0.0      |
+|0.7361807164390443|40.0|     0.0      |
+|1.606258789467366 |50.0|     0.0      |
+|8.018795829567205 |60.0|     0.0      |
+|10.576515271966457|70.0|     0.0      |
+| 4.56201870405479 |80.0|     0.0      |
+|1.7953882204565432|90.0|     0.0      |
+o------------------o----o--------------o
+
+Foxes (Predator) (SciPy Integration Method):
+o------------------o----o--------------o
+|       y(t)       | t  |Relative Error|
+o------------------o----o--------------o
+|       5.0        |0.0 |     0.0      |
+| 3.13789585714769 |10.0|     0.0      |
+|3.8820880294562135|20.0|     0.0      |
+|6.1761367483520155|30.0|     0.0      |
+|10.540117959272887|40.0|     0.0      |
+|17.196382411009864|50.0|     0.0      |
+|17.236163761117655|60.0|     0.0      |
+|5.4914041027486125|70.0|     0.0      |
+|3.155184539281797 |80.0|     0.0      |
+|3.752845071543329 |90.0|     0.0      |
+o------------------o----o--------------o
+
+---------------------------------------------------------------"""
+

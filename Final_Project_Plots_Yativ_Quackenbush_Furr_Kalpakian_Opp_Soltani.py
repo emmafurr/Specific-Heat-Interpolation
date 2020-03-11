@@ -101,9 +101,13 @@ plt.plot(np.arange(0, 91), nevillesMethod_y_1_list, label="Neville's Method")
 plt.title("Using Data From Table 1")
 plt.xlabel("Temperature(°C)")
 plt.ylabel("Specific Heat (J / kg-°C)")
+<<<<<<< HEAD:plots.py
 plt.legend(), plt.grid(True), plt.show()
-
-
+=======
+plt.legend()
+plt.draw()
+plt.show()
+>>>>>>> 9a7ad9b2f2c8e9b3b505f93edac2aad6f72373b4:Final_Project_Plots_Yativ_Quackenbush_Furr_Kalpakian_Opp_Soltani.py
 
 
 
@@ -162,7 +166,3 @@ plt.plot(np.arange(0, 91), nevillesMethod_y_2_list, label="Neville's Method")
 plt.title("Using Data From Table 2")
 plt.xlabel("Temperature(°C)")
 plt.ylabel("Specific Heat (J / kg-°C)")
-plt.legend(), plt.grid(True), plt.show()
-
-
-
